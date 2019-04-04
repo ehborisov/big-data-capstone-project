@@ -1,0 +1,7 @@
+rootProject.name = 'bigdata-capstone'
+
+include 'subnet-start-hive-udf'
+include 'subnet-end-hive-udf'
+include 'ip-convert-hive-udf'
+include 'py_events_producer'
+include 'java-udf-util'

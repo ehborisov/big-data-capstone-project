@@ -1,0 +1,16 @@
+description = 'Hive UDF function which converts IPv4 address in base 10 numeric representation'
+
+
+dependencies {
+    compile project(':java-udf-util')
+    compile('org.apache.hive:hive-exec')
+    compile('org.apache.hadoop:hadoop-client')
+}
+
+shadowJar {
+    zip64 true
+    manifest {
+        attributes 'Main-class': 'com.eborisov.udf.ConvertIp'
+    }
+    baseName = "ip-convert-hive-udf"
+}

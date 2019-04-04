@@ -1,0 +1,7 @@
+description = 'Hive UDF which computes IPv4 subnetwork range start in base 10 representation'
+
+apply plugin: 'java'
+
+dependencies {
+    compile('com.google.guava:guava')
+}

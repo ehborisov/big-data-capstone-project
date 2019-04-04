@@ -1,0 +1,16 @@
+description = 'Hive UDF which computes IPv4 subnetwork range end in base 10 long representation'
+
+dependencies {
+    compile project(':java-udf-util')
+    compile('org.apache.hive:hive-exec')
+    compile('org.apache.hadoop:hadoop-client')
+    compile('commons-net:commons-net')
+}
+
+shadowJar {
+    zip64 true
+    manifest {
+        attributes 'Main-class': 'com.eborisov.udf.SubnetRangeEnd'
+    }
+    baseName = 'subnet-end-hive-udf'
+}

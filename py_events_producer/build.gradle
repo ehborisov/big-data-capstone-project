@@ -1,0 +1,7 @@
+description = 'Events generator for Flume netcat source.'
+
+
+python {
+    pip 'random-word:1.0.3'
+    pip 'scipy:1.2.1'
+}

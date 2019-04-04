@@ -1,0 +1,5 @@
+sqoop export --connect jdbc:postgresql://127.0.0.1:5432/capstonedb --driver org.postgresql.Driver --username admin -P \
+ --export-dir /user/hive/warehouse/categories_top --table top_10_categories_by_purchases
+
+sqoop export --connect jdbc:postgresql://127.0.0.1:5432/capstonedb --driver org.postgresql.Driver --username admin -P \
+ --export-dir /user/hive/warehouse/top_products_for_each_category --table top_products_for_each_category
