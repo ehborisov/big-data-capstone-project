@@ -11,6 +11,7 @@ buildscript {
         classpath 'io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE'
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.3'
         classpath 'ru.vyarus:gradle-use-python-plugin:1.2.0'
+        classpath 'de.undercouch:gradle-download-task:3.4.3'
     }
 }
 
@@ -18,6 +19,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.7.RELEASE'
     id 'com.github.johnrengelman.plugin-shadow' version '2.0.3' apply false
     id 'ru.vyarus.use-python' version '1.2.0' apply false
+    id 'de.undercouch.download' version '3.4.3' apply false
 }
 
 description = 'Capstone project for hadoop developer course'
@@ -31,7 +33,7 @@ subprojects { project ->
     if (name.startsWith('py_')) {
         apply plugin: 'ru.vyarus.use-python'
     }
-    if (name.endsWith('hive-udf')) {
+    if (name.contains('udf')) {
         apply plugin: 'java'
         apply plugin: 'com.github.johnrengelman.shadow'
         sourceCompatibility = 1.7
@@ -54,6 +56,9 @@ subprojects { project ->
             dependency 'org.apache.hadoop:hadoop-client:2.6.0'
             dependency 'commons-net:commons-net:3.6'
             dependency 'com.google.guava:guava:19.0'
+            dependency 'org.apache.spark:spark-core_2.12:2.4.0'
+            dependency 'org.apache.spark:spark-sql_2.12:2.4.0'
+            dependency 'org.scala-lang:scala-library:2.11.12'
         }
     }
 }

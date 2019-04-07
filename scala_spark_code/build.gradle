@@ -1,0 +1,19 @@
+description = 'Scala script with purchases analysis on Spark.'
+
+apply plugin: 'scala'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+
+dependencies {
+    implementation 'org.scala-lang:scala-library'
+    implementation project(':java-udf-util')
+    implementation 'com.google.guava:guava'
+    implementation 'commons-net:commons-net'
+    implementation 'org.apache.spark:spark-core_2.12'
+    implementation 'org.apache.spark:spark-sql_2.12'
+}
+
+shadowJar {
+    zip64 true
+    baseName = 'purchases_analysis'
+}

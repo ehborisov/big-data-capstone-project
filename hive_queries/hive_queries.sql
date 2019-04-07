@@ -12,13 +12,13 @@ FIELDS TERMINATED BY ','
 LOCATION '/user/cloudera/flume/events/';
 
 -- 2. Fill the table with Flume events stored in hdfs, creating partitions manually
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/21/FlumeData.1553797510198' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 21);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/22/FlumeData.1553797510552' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 22);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/23/FlumeData.1553797510638' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 23);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/24/FlumeData.1553797510783' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 24);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/25/FlumeData.1553797506776' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 25);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/26/FlumeData.1553797510384' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 26);
-LOAD DATA INPATH '/user/cloudera/flume/events/2019/03/27/FlumeData.1553797510074' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 27);
+LOAD DATA INPATH '/user/eborisov/events/2019/03/28/FlumeData.1554369553594' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 28);
+LOAD DATA INPATH '/user/eborisov/events/2019/03/29/FlumeData.1554369553337' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 29);
+LOAD DATA INPATH '/user/eborisov/events/2019/03/30/FlumeData.1554369553107' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 30);
+LOAD DATA INPATH '/user/eborisov/events/2019/03/31/FlumeData.1554369553504' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 31);
+LOAD DATA INPATH '/user/eborisov/events/2019/04/01/FlumeData.1554369552997' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 01);
+LOAD DATA INPATH '/user/eborisov/events/2019/04/02/FlumeData.1554369552211' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 02);
+LOAD DATA INPATH '/user/eborisov/events/2019/04/03/FlumeData.1554369553711' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 03);
 
 -- 3. Create ip addresses table and load the data from csv
 CREATE EXTERNAL TABLE networks (
@@ -64,7 +64,7 @@ FROM
     ) as categories_enumerated
 where categories_enumerated.row_num <= 10;
 
--- 5. Select top 10 most frequently purchased product in each category
+-- 5. Select top 3 most frequently purchased product in each category
 SELECT
     product_category,
     key as product,
@@ -99,7 +99,7 @@ CREATE FUNCTION convert_ip AS 'com.ehborisov.udf.ConvertIp';
 
 -- with UDFs defined above:
 -- assuming we would use set mapreduce.input.fileinputformat.split.maxsize=5000000; (depending on the number of workers)
--- to split presumably large purchases table and do a cross join as map join.
+-- to split presumably large purchases table and do a cross join as map join which is scalable.
 
 
 WITH p AS
@@ -125,5 +125,5 @@ FROM
     FROM p INNER JOIN n_ranges ON (p.key=n_ranges.key)
     WHERE p.ip_address BETWEEN n_ranges.subnet_start AND n_ranges.subnet_end
     GROUP BY n_ranges.country_name
-    ORDER BY spending) as t
-LIMIT 10
+    ORDER BY spending DESC) as t
+LIMIT 10;

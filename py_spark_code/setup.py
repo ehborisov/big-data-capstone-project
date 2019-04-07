@@ -1,15 +1,14 @@
 from setuptools import setup
 
 setup_config = {
-    'description': 'Events generator for Flume netcat source.',
+    'description': 'Module with spark-related code for capstone tasks.',
     'author': 'Borisov Egor',
     'version': '1.0',
-    'packages': ['events_producer'],
+    'packages': ['spark_code'],
     'install_requires': [
-        'random-word=1.0.3'
-        'scipy=1.2.1'
+        'pyspark=2.4.0'
     ],
-    'name': 'py_events_producer'
+    'name': 'py_spark_code'
 }
 
 
