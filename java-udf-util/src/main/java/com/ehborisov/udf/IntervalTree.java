@@ -186,7 +186,7 @@ public class IntervalTree<O extends Object> implements Serializable {
                 // overlap is sorted by start point
                 List<IntervalData<O>> local_overlap = (List) Arrays.asList(Arrays.copyOf(overlap.toArray(), overlap.size()));
                 Collections.sort(local_overlap, START_COMPARATOR);
-                for (IntervalData<O> data : overlap) {
+                for (IntervalData<O> data : local_overlap) {
                     if (data.start > index)
                         break;
 
@@ -200,7 +200,7 @@ public class IntervalTree<O extends Object> implements Serializable {
                 // overlap is reverse sorted by end point
                 List<IntervalData<O>> local_overlap = (List) Arrays.asList(Arrays.copyOf(overlap.toArray(), overlap.size()));
                 Collections.sort(local_overlap,END_COMPARATOR);
-                for (IntervalData<O> data : overlap) {
+                for (IntervalData<O> data : local_overlap) {
                     if (data.end < index)
                         break;
 
