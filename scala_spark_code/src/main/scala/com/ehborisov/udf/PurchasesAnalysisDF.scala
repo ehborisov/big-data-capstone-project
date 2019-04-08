@@ -6,12 +6,9 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{col, rank, sum, udf}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.SparkSession
-// import com.google.common.collect.ImmutableRangeMap
-// import com.google.common.collect.Range
-import IntervalTree.IntervalData
-import IntervalTree.createFromList
+import com.google.common.collect.ImmutableRangeMap
+import com.google.common.collect.Range;
 
-import scala.collection.JavaConversions.mutableSeqAsJavaList
 import scala.io.Source
 
 object PurchasesAnalysisDF {
@@ -44,9 +41,9 @@ object PurchasesAnalysisDF {
       .agg(sum("price").alias("total_spending"))
       .orderBy(col("total_spending").desc)
 
-    top_categories.take(10).foreach {
-      println
-    }
+//    top_categories.take(10).foreach {
+//      println
+//    }
 
     // Select top 3 most frequently purchased product in each category
 
@@ -60,25 +57,11 @@ object PurchasesAnalysisDF {
       .filter(col("rank") === 3)
       .drop("rank")
 
-    top_3_products.collect().foreach {
-      println
-    }
+//    top_3_products.collect().foreach {
+//      println
+//    }
 
     // Select top 10 countries with the highest money spending using ip addresses table
-
-    def getFirstOrNone(a: Array[AnyRef]): String = {
-      if (a.isEmpty) {
-        null
-      }
-      else {
-        Some(a(0)).asInstanceOf[String]
-      }
-    }
-
-    def extractQueryResult(x: Option[IntervalTree.IntervalData[String]]) = x match {
-      case Some(s) => getFirstOrNone(s.getData.toArray())
-      case None => null
-    }
 
     val networks_csv = Source.fromFile("/data/capstone/geodata/GeoLite2-Country-Blocks-IPv4.csv")
       .getLines.map(_.split(","))
@@ -109,18 +92,22 @@ object PurchasesAnalysisDF {
       })
       .map(k => {
       val network_range = extract_network_range(k)
-      new IntervalData(convert_ip(network_range._1), convert_ip(network_range._2), country_by_network(k))
-    }).toBuffer
+      (Range.open(
+        convert_ip(network_range._1): java.lang.Integer,
+        convert_ip(network_range._2): java.lang.Integer),
+        country_by_network(k): java.lang.String
+      )
+    }).toArray
 
- //   val rangeMapBuilder = ImmutableRangeMap.builder[Integer, String]
- //   for (t <- data) {
- //     rangeMapBuilder.put(t._1, t._2)
- //   } gives java.io.NotSerializableException: com.google.common.collect.ImmutableRangeMap if used - WTF???
+    val rangeMapBuilder = ImmutableRangeMap.builder[Integer, String]
+    for (t <- data) {
+      rangeMapBuilder.put(t._1, t._2)
+    }
 
-    val networks_range_map = spark.sparkContext.broadcast(createFromList(mutableSeqAsJavaList(data)))
+    val networks_range_map = spark.sparkContext.broadcast(rangeMapBuilder.build())
 
     val get_ip_country = (s: String) => {
-      extractQueryResult(Option(networks_range_map.value.query(convert_ip(s))))
+      networks_range_map.value.get(convert_ip(s))
     }
 
 
