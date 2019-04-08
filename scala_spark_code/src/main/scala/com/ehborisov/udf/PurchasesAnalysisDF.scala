@@ -40,10 +40,9 @@ object PurchasesAnalysisDF {
       .groupBy("product_category")
       .agg(sum("price").alias("total_spending"))
       .orderBy(col("total_spending").desc)
+      .limit(10)
 
-//    top_categories.take(10).foreach {
-//      println
-//    }
+    top_categories.show()
 
     // Select top 3 most frequently purchased product in each category
 
@@ -57,9 +56,7 @@ object PurchasesAnalysisDF {
       .filter(col("rank") === 3)
       .drop("rank")
 
-//    top_3_products.collect().foreach {
-//      println
-//    }
+    top_3_products.show()
 
     // Select top 10 countries with the highest money spending using ip addresses table
 
@@ -120,6 +117,7 @@ object PurchasesAnalysisDF {
       .groupBy("country")
       .agg(sum("price").alias("total_spending"))
       .orderBy(col("total_spending").desc)
+      .limit(10)
 
     top_countries_by_spending.show()
   }
