@@ -56,9 +56,11 @@ subprojects { project ->
             dependency 'org.apache.hadoop:hadoop-client:2.6.0'
             dependency 'commons-net:commons-net:3.6'
             dependency 'com.google.guava:guava:19.0'
-            dependency 'org.apache.spark:spark-core_2.12:2.4.0'
-            dependency 'org.apache.spark:spark-sql_2.12:2.4.0'
-            dependency 'org.scala-lang:scala-library:2.11.12'
+            dependency 'org.apache.spark:spark-core_2.10:1.6.1'
+            dependency 'org.apache.spark:spark-sql_2.10:1.6.1'
+            dependency 'org.scala-lang:scala-library:2.10.7'
+            dependency 'com.databricks:spark-csv_2.10:1.5.0'
+            dependency 'org.apache.spark:spark-hive_2.10:1.6.1'
         }
     }
 }

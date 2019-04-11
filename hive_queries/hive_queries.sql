@@ -88,11 +88,13 @@ FROM
                  GROUP BY product_name, product_category) products_by_cat
          GROUP BY product_category) t
     LATERAL VIEW explode(t.purchases_top) t AS key,value) t2
-WHERE rank_num <= 3
+WHERE rank_num = 3;
 
 -- 6. Select top 10 countries with the highest money spending using ip addresses table
 
-
+add jar hdfs:///user/eborisov/subnet-end-hive-udf-1.0-SNAPSHOT-all.jar;
+add jar hdfs:///user/eborisov/subnet-end-hive-udf-1.0-SNAPSHOT-all.jar;
+add jar hdfs:///user/eborisov/ip-convert-hive-udf-1.0-SNAPSHOT-all.jar;
 CREATE FUNCTION subnet_range_start AS 'com.ehborisov.udf.SubnetRangeStart';
 CREATE FUNCTION subnet_range_end AS 'com.ehborisov.udf.SubnetRangeEnd';
 CREATE FUNCTION convert_ip AS 'com.ehborisov.udf.ConvertIp';
@@ -127,3 +129,23 @@ FROM
     GROUP BY n_ranges.country_name
     ORDER BY spending DESC) as t
 LIMIT 10;
+
+
+--SELECT
+--    product_category,
+--    t.product_name as product_name,
+--    purchases_count,
+--    t.rank_num as rank
+--FROM
+--    (SELECT
+--         product_name,
+--         product_category,
+--         purchases_count,
+--         rank() OVER(PARTITION BY product_category) AS rank_num
+--     FROM
+--         (SELECT
+--            product_category,
+--            product_name,
+--            count() OVER (PARTITION BY product_category, product_name) as purchases_count
+--          FROM purchases) products_by_cat) t
+--WHERE t.rank_num == 3;
