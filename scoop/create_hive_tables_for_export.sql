@@ -33,7 +33,7 @@ FROM
         product_category,
         key,
         value,
-        rank() OVER(PARTITION BY product_category ORDER BY value DESC) AS rank_num
+        dense_rank() OVER(PARTITION BY product_category ORDER BY value DESC) AS rank_num
     FROM
         (SELECT
              product_category,

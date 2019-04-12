@@ -12,13 +12,13 @@ FIELDS TERMINATED BY ','
 LOCATION '/user/cloudera/flume/events/';
 
 -- 2. Fill the table with Flume events stored in hdfs, creating partitions manually
-LOAD DATA INPATH '/user/eborisov/events/2019/03/28/FlumeData.1554369553594' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 28);
-LOAD DATA INPATH '/user/eborisov/events/2019/03/29/FlumeData.1554369553337' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 29);
-LOAD DATA INPATH '/user/eborisov/events/2019/03/30/FlumeData.1554369553107' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 30);
-LOAD DATA INPATH '/user/eborisov/events/2019/03/31/FlumeData.1554369553504' INTO TABLE purchases PARTITION (year= 2019, month = 03, day = 31);
-LOAD DATA INPATH '/user/eborisov/events/2019/04/01/FlumeData.1554369552997' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 01);
-LOAD DATA INPATH '/user/eborisov/events/2019/04/02/FlumeData.1554369552211' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 02);
-LOAD DATA INPATH '/user/eborisov/events/2019/04/03/FlumeData.1554369553711' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 03);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/04/FlumeData.1554369553594' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 04);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/05/FlumeData.1554369553337' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 05);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/06/FlumeData.1554369553107' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 06);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/07/FlumeData.1554369553504' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 07);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/08/FlumeData.1554369552997' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 08);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/09/FlumeData.1554369552211' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 09);
+LOAD DATA INPATH '/user/cloudera/flume/events/2019/04/10/FlumeData.1554369553711' INTO TABLE purchases PARTITION (year= 2019, month = 04, day = 10);
 
 -- 3. Create ip addresses table and load the data from csv
 CREATE EXTERNAL TABLE networks (
@@ -32,7 +32,7 @@ CREATE EXTERNAL TABLE networks (
 tblproperties ("skip.header.line.count"="1");
 
 
-LOAD DATA LOCAL INPATH '/data/capstone/events-producer/src/main/resources/GeoLite2-Country-Blocks-IPv4.csv' OVERWRITE INTO TABLE networks;
+LOAD DATA LOCAL INPATH '/data/capstone/geodata/GeoLite2-Country-Blocks-IPv4.csv' OVERWRITE INTO TABLE networks;
 
 CREATE EXTERNAL TABLE countries (
     geoname_id INT,
@@ -45,7 +45,7 @@ CREATE EXTERNAL TABLE countries (
 ) row format delimited fields terminated by ','
 tblproperties ("skip.header.line.count"="1");
 
-LOAD DATA LOCAL INPATH '/data/capstone/events-producer/src/main/resources/GeoLite2-Country-Locations-en.csv' OVERWRITE INTO TABLE countries;
+LOAD DATA LOCAL INPATH '/data/capstone/geodata/GeoLite2-Country-Locations.csv' OVERWRITE INTO TABLE countries;
 
 -- 4. Select top 10  most frequently purchased categories
 SELECT
@@ -75,7 +75,7 @@ FROM
         product_category,
         key,
         value,
-        rank() OVER(PARTITION BY product_category ORDER BY value DESC) AS rank_num
+        dense_rank() OVER(PARTITION BY product_category ORDER BY value DESC) AS rank_num
     FROM
         (SELECT
              product_category,
@@ -129,23 +129,3 @@ FROM
     GROUP BY n_ranges.country_name
     ORDER BY spending DESC) as t
 LIMIT 10;
-
-
---SELECT
---    product_category,
---    t.product_name as product_name,
---    purchases_count,
---    t.rank_num as rank
---FROM
---    (SELECT
---         product_name,
---         product_category,
---         purchases_count,
---         rank() OVER(PARTITION BY product_category) AS rank_num
---     FROM
---         (SELECT
---            product_category,
---            product_name,
---            count() OVER (PARTITION BY product_category, product_name) as purchases_count
---          FROM purchases) products_by_cat) t
---WHERE t.rank_num == 3;

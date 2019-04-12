@@ -11,3 +11,8 @@ CREATE TABLE top_products_for_each_category (
     purchases_count integer,
     product_rank integer
 );
+
+CREATE TABLE top_countries_by_spending (
+    country text,
+    spending float
+);
