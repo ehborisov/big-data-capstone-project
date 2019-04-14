@@ -1,9 +1,9 @@
-=Hadoop developer capstone project:
+# Hadoop developer capstone project:
 
 This project contains data ingestion pipleine configuration and analysis scrips for a small sample project
 of data processing using Hadoop, Flume, Hive and Spark in the Cloudera quickstart VM.
 
-Usage:
+## Usage:
 
 1) Start Flume agent with configuration provided in the module `flume-conf`
 2) Start events-producing python script in the `py_events_producer`
@@ -26,3 +26,4 @@ spark-submit --class com.ehborisov.udf.PurchasesAnalysisDF --executor-memory 512
 it expects postgres database named `capstone` be available at the default port to export the results. 
 7) To export the results of hive queries into the same database use SQL scripts and Sqoop commands from the `sqoop`
 module.
+
