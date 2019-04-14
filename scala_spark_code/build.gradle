@@ -13,6 +13,7 @@ dependencies {
     implementation 'org.apache.spark:spark-sql_2.10'
     implementation 'com.databricks:spark-csv_2.10'
     implementation 'org.apache.spark:spark-hive_2.10'
+    implementation 'postgresql:postgresql'
 }
 
 shadowJar {

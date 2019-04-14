@@ -61,6 +61,7 @@ subprojects { project ->
             dependency 'org.scala-lang:scala-library:2.10.7'
             dependency 'com.databricks:spark-csv_2.10:1.5.0'
             dependency 'org.apache.spark:spark-hive_2.10:1.6.1'
+            dependency 'postgresql:postgresql:8.4-702.jdbc4'
         }
     }
 }
