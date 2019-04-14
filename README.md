@@ -6,12 +6,17 @@ of data processing using Hadoop, Flume, Hive and Spark in the Cloudera quickstar
 ## Usage:
 
 1) Start Flume agent with configuration provided in the module `flume-conf`
+
 2) Start events-producing python script in the `py_events_producer`
+
 3) Generate the amount of data you'd like to process. (Flume will output generated events in
  `/user/cloudera/flume/events/%Y/%m/%d` directory in HDFS using regex interceptors for timestamp column)
+
 4) Start hive commandline or Hue and execute SQL scripts from `hive_queries`
+
 5) To execute the last query which requires UDFs, build project with gradle `./gradlew clean build shadowJar`
 and place jars into Hive auxiliary jars directory, and then add them and execute `create function` commands.
+
 6) For the spark part use the Jar from the `scala_spark_code` module and use the following spark-submit command.
 ```bash
 spark-submit --class com.ehborisov.udf.PurchasesAnalysisDF --executor-memory 512m --driver-memory 512m  \
@@ -23,7 +28,8 @@ spark-submit --class com.ehborisov.udf.PurchasesAnalysisDF --executor-memory 512
 /data/capstone/scala_spark_code/build/libs/purchases_analysis-1.0-SNAPSHOT-all.jar
 ```
 
-it expects postgres database named `capstone` be available at the default port to export the results. 
+it expects postgres database named `capstone` to be available at the default port to export the results. 
+
 7) To export the results of hive queries into the same database use SQL scripts and Sqoop commands from the `sqoop`
 module.
 
